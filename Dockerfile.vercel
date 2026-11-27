@@ -1,0 +1,20 @@
+
+FROM dunglas/frankenphp:1-php8.4
+
+# Install PHP extensions for MySQL and image handling
+RUN install-php-extensions \
+    mysqli \
+    pdo_mysql \
+    gd \
+    exif
+
+WORKDIR /app
+
+# Copy the existing website
+COPY . /app
+
+# Copy web server configuration
+COPY Caddyfile /etc/caddy/Caddyfile
+
+# Start PHP web server
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
